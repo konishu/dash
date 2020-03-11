@@ -19,7 +19,7 @@ reviews = []
 
 for datum in data:
     dates.append(datum.date)
-    subsctibers.append(datum.subscribers)
+    subscribers.append(datum.subscribers)
     reviews.append(datum.reviews)
 
 diff_subscribers = pd.Series(subscribers).diff().values
@@ -36,7 +36,7 @@ app.layout = html.Div(children=[
                 'data':[
                     go.Scatter(
                         x=dates,
-                        y=n_subscribers,
+                        y=subscribers,
                         mode='lines+markers',
                         name='受講生総数',
                         opacity=0.7,
@@ -69,7 +69,7 @@ app.layout = html.Div(children=[
                 'data':[
                     go.Scatter(
                         x=dates,
-                        y=n_reviews,
+                        y=reviews,
                         mode='lines+markers',
                         name='レビュー総数',
                         opacity=0.7,
