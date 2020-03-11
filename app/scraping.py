@@ -1,7 +1,9 @@
 from bs4 import BeautifulSoup
 import requests
-import pandas as pd
 import datetime
+
+import assets.database db_session
+import assets.models Data
 
 def get_udemy_info(url) :
     requests.get(url)
@@ -25,19 +27,18 @@ def get_udemy_info(url) :
 
 
 def write_data():
-    df = pd.read_csv('assets/data.csv')
+    
     _results = get_udemy_info('https://scraping-for-beginner.herokuapp.com/udemy')
 
     # 各要素を用意
-    date = datetime.datetime.today().strftime('%Y/%-m/%-d')
+    date = datetime.date.today()
     subscribers = _results['student']
     reviews = _results['reviews']
-    # データフレームの形にする
-    results = pd.DataFrame([[date,subscribers,reviews]], columns=['date','subscribers','reviews'])
-    # データの結合
-    df = pd.concat([df,results])
-    # データの出力
-    df.to_csv('assets/data.csv',index='False')
+    
+    row = Data(date=date,subscribers=subscribers,reviews=reviews)
+
+    db_session.add(row)
+    db_session.commit()
 
 if __name__=="__main__":
     write_data()
